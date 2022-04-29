@@ -1,27 +1,18 @@
+import { NotFound } from 'components/Common';
+import { LoginPage } from 'features/auth/pages';
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
-
-function Example() {
-  return <div>Example</div>;
-}
-
-function NotFound() {
-  return <div>Not Found</div>;
-}
 
 function App() {
   return (
     <Switch>
-      <Route path="/">
-        <Example />
+      <Route exact path="/login">
+        <LoginPage />
       </Route>
 
-      {/* <Route>
+      <Route>
         <NotFound />
-      </Route> */}
+      </Route>
     </Switch>
   );
 }
