@@ -7,13 +7,14 @@ import * as serviceWorker from './serviceWorker';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from 'utils/history';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <App />
       </ConnectedRouter>
     </Provider>
