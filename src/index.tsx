@@ -8,17 +8,16 @@ import { ConnectedRouter } from 'connected-react-router';
 import { history } from 'utils/history';
 import { ToastContainer } from 'react-toastify';
 import './index.css';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { Link, Route, Router } from 'react-router-dom';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        {/* <ToastContainer /> */}
-        <App />
-      </ConnectedRouter>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <ToastContainer />
+      <App />
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById('root')
 );
 

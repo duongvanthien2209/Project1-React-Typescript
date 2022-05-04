@@ -1,19 +1,26 @@
 import { NotFound } from 'components/Common';
-import { LoginPage } from 'features/auth/pages';
+import { Default } from 'components/Layout';
+import { LoginPage, RegisterPage } from 'features/auth/pages';
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <Switch>
-      <Route exact path="/login">
-        <LoginPage />
-      </Route>
+    <Default>
+      <Switch>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
 
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+        <Route exact path="/register">
+          <RegisterPage />
+        </Route>
+
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </Default>
   );
 }
 
