@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@neojp/tailwindcss-line-clamp-utilities": "^1.0.1",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.5",
     "postcss": "^8.4.13",

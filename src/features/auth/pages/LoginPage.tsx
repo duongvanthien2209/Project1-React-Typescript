@@ -21,6 +21,7 @@ export function LoginPage(props: ILoginPageProps) {
   });
 
   const handleSubmit = (values: LoginPayload | undefined) => {
+    console.log('VALUES: ', values);
     if (values) dispatch(authActions.login(values));
   };
 

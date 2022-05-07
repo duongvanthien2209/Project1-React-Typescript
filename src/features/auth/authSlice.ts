@@ -61,6 +61,7 @@ const authSlide = createSlice({
 export const authActions = authSlide.actions;
 
 // Selectors
+export const getIsLoggedIn = (state: any) => state.auth.isLoggedIn;
 
 // Reducer
 const authReducer = authSlide.reducer;

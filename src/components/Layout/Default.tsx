@@ -9,7 +9,7 @@ export function Default({ children }: DefaultProps) {
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main className="py-20">{children}</main>
     </>
   );
 }

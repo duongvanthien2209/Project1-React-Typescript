@@ -50,7 +50,7 @@ function* handleLogin(payload: LoginPayload) {
       localStorage.setItem('access_token', token);
       toast.success('Đăng nhập thành công');
       yield put(authActions.loginSuccess(user));
-      // Redirect to home
+      yield put(push('/'));
     }
 
     if (status === 'failed' && error && error.message) {
@@ -63,6 +63,7 @@ function* handleLogin(payload: LoginPayload) {
 }
 
 function* handleLogout() {
+  console.log('Log out');
   localStorage.removeItem('access_token');
   yield put(authActions.logout);
   yield put(push('/login'));
@@ -70,16 +71,17 @@ function* handleLogout() {
 
 function* watchLoginFlow() {
   while (true) {
-    const isLoggedIn = Boolean(localStorage.getItem('access_token'));
-
-    if (!isLoggedIn) {
-      const action: PayloadAction<LoginPayload> = yield take(
-        authActions.login.type
-      );
-      yield fork(handleLogin, action.payload);
+    while (true) {
+      const isLoggedIn = Boolean(localStorage.getItem('access_token'));
+      if (!isLoggedIn) {
+        const action: PayloadAction<LoginPayload> = yield take(
+          authActions.login.type
+        );
+        yield call(handleLogin, action.payload);
+      } else break;
     }
 
-    yield take(authActions.logout);
+    yield take(authActions.logout.type);
     yield fork(handleLogout);
   }
 }

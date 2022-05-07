@@ -4,6 +4,7 @@ import { LoginPayload, RegisterPayload } from 'features/auth/authSlice';
 
 export const authApi = {
   loginApi(loginData: LoginPayload) {
+    console.log('PAYLOAD: ', loginData);
     const url = `${baseUrl}/user/auth/login`;
     return axiosClient.post(url, loginData);
   },

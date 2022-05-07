@@ -13,18 +13,35 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { CategoryList } from 'features/auth/components';
 import { Category, Response } from 'models';
 import { categoryApi } from 'api/user/category';
-import { AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import {
+  filterActions,
+  FilterPayload,
+  getCurrentCategoryId,
+} from 'features/filter/filterSlice';
+import { CartDialog } from 'features/cart/components';
+import { getProducts } from 'features/cart/cartSlice';
+import { getIsLoggedIn, authActions } from 'features/auth/authSlice';
 
 export interface ResponseCategories {
   categories: Category[];
   total: number;
 }
 
+interface initialValuesType {
+  search: string;
+}
+
 interface HeaderProps {}
 
 export function Header(props: HeaderProps) {
   const [listCategory, setListCategory] = React.useState<Category[]>([]);
+  const categoryId = useAppSelector(getCurrentCategoryId);
+  const products = useAppSelector(getProducts);
+  const isLoggedIn = useAppSelector(getIsLoggedIn);
+
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     fetchCategoryList();
@@ -46,7 +63,19 @@ export function Header(props: HeaderProps) {
     }
   };
 
-  const initialValues = {
+  const handleSubmit = (values: initialValuesType) => {
+    if (values && values.search) {
+      const filterData: FilterPayload = { q: values.search };
+      if (categoryId) filterData.categoryId = categoryId;
+      dispatch(filterActions.search(filterData));
+    }
+  };
+
+  const handleSignOut = () => {
+    dispatch(authActions.logout());
+  };
+
+  const initialValues: initialValuesType = {
     search: '',
   };
 
@@ -68,13 +97,10 @@ export function Header(props: HeaderProps) {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              console.log('VALUE: ', values);
-            }}
+            onSubmit={handleSubmit}
           >
             {(formikProps) => {
               const { values, errors, touched, isSubmitting } = formikProps;
-              console.log('TOUCHED: ', touched, errors);
 
               return (
                 <Form className="relative flex border border-[#BCE3C9] rounded-md p-4 ml-8 mr-auto">
@@ -103,13 +129,21 @@ export function Header(props: HeaderProps) {
             }}
           </Formik>
           <ul className="flex">
-            <li className="flex items-end mr-5">
-              <span className="mr-1">
+            <li className="relative flex items-end mr-5 group">
+              <span className="relative mr-1">
                 <FontAwesomeIcon className="fa-lg" icon={faCartShopping} />
+                <span className="absolute flex justify-center items-center text-white text-sm top-[-5px] right-[-5px] h-4 w-4 rounded-full bg-green-600">
+                  {products.length}
+                </span>
               </span>
               <span className="mb-[-3px]">Cart</span>
+              <CartDialog />
             </li>
-            <li className="relative flex items-end group after:content-[''] after:absolute after:left-0 after:top-full after:w-40 after:h-4">
+            <li
+              className={`${
+                !isLoggedIn ? 'hidden ' : ''
+              }relative flex items-end group after:content-[''] after:absolute after:left-0 after:top-full after:w-40 after:h-4`}
+            >
               <span className="mr-1">
                 <FontAwesomeIcon className="fa-lg" icon={faUser} />
               </span>
@@ -121,7 +155,10 @@ export function Header(props: HeaderProps) {
                     <span className="text-sm">My Account</span>
                   </Link>
                 </li>
-                <li className="py-2 cursor-pointer hover:text-green-400">
+                <li
+                  onClick={handleSignOut}
+                  className="py-2 cursor-pointer hover:text-green-400"
+                >
                   <FontAwesomeIcon
                     className="fa-sm mr-3"
                     icon={faArrowRightFromBracket}

@@ -2,16 +2,22 @@ import { Category } from 'models';
 import * as React from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAppDispatch } from 'app/hooks';
+import { filterActions } from 'features/filter/filterSlice';
 
 export interface ICategoryListProps {
   list: Category[];
 }
 
 export function CategoryList({ list }: ICategoryListProps) {
-  const [currentIndex, setcurrentIndex] = React.useState(-1);
+  const dispatch = useAppDispatch();
+  const [currentId, setcurrentId] = React.useState<string | null>(null);
 
-  const handleItemSelected = (index: number) => {
-    if (index >= 0) setcurrentIndex(index);
+  const handleItemSelected = (id: string) => {
+    if (id) {
+      dispatch(filterActions.changeCategory(id));
+      setcurrentId(id);
+    }
   };
 
   return (
@@ -23,12 +29,13 @@ export function CategoryList({ list }: ICategoryListProps) {
         </span>
       </div>
       <ul className="absolute top-full left-0 bg-white w-44 p-4 border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-        {list.map((item, index) => (
+        {list.map((item) => (
           <li
+            key={item._id}
             className={`cursor-pointer py-2 pl-1 hover:bg-gray-200${
-              currentIndex === index ? ' bg-green-600' : ''
+              currentId === item._id ? ' bg-green-600' : ''
             }`}
-            onClick={() => handleItemSelected(index)}
+            onClick={() => handleItemSelected(item._id)}
           >
             <span>{item.name}</span>
           </li>
